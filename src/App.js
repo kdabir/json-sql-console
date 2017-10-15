@@ -7,17 +7,45 @@ import "brace/mode/sql";
 import "brace/theme/solarized_dark";
 import "brace/ext/language_tools";
 
+// storage wrapper, inspired by: https://survivejs.com/react/implementing-kanban/implementing-persistency/
+const sw = storage => ({
+    get() {
+        try {
+            return JSON.parse(storage.getItem('_app_state'));
+        } catch (e) {
+            return null;
+        }
+    },
+    set(v) {
+        storage.setItem("_app_state", JSON.stringify(v));
+    }
+});
+
 
 class App extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state =  {json:'[]', sql:'select * from ?'};
+        this.store = sw(localStorage);
+        this.state = this.store.get() || {json: '[]', sql: 'select * from ?'};
     }
 
-    runSql(json, sql) {
-        console.log('running SQL', json, sql);
-        console.table(alasql(sql, [JSON.parse(json)]));
+    // whenever the component updates, store the state
+    componentDidUpdate() {
+        this.store.set(this.state)
+    }
+
+    update() {
+        let json = this.refs.jsonEditor.editor.getValue(),
+            sql = this.refs.sqlEditor.editor.getValue();
+
+        // after state is updated, run the sql - https://reactjs.org/docs/react-component.html#setstate
+        this.setState({json, sql}, this.runSql)
+    }
+
+    runSql() {
+        console.log('running SQL...');
+        console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
     }
 
     render() {
@@ -28,33 +56,37 @@ class App extends Component {
                     <div className='column'>
                         <p>Json Data (Array)</p>
                         <AceEditor
+                            ref='jsonEditor'
                             style={{width: '100%'}}
-                            name="jsonEditor"
                             mode="json"
                             theme="solarized_dark"
                             value={this.state.json}
-                            ref='jsonEditor'/>
+                            commands={[{
+                                name: 'execute',
+                                bindKey: {win: 'Ctrl-Enter', mac: 'Command-Enter'},
+                                exec: (editor) => {this.update()}
+                            }]}
+                        />
                     </div>
                     <div className='column'>
-                        <p>SQL</p>
+                        <p>SQL -
+                            <button onClick={() => { this.update() }}> Run </button>
+                        </p>
                         <AceEditor
+                            ref='sqlEditor'
                             style={{width: '100%'}}
-                            name='sqlEditor'
                             mode="sql"
                             theme="solarized_dark"
                             value={this.state.sql}
-                            ref='sqlEditor'/>
+                            commands={[{
+                                name: 'execute',
+                                bindKey: {win: 'Ctrl-Enter', mac: 'Command-Enter'},
+                                exec: (editor) => {this.update()}
+                            }]}
+                        />
                     </div>
                 </div>
 
-                <button onClick={() => {
-                    let json = this.refs.jsonEditor.editor.getValue(),
-                        sql = this.refs.sqlEditor.editor.getValue();
-                    this.setState({json,sql})
-                    this.runSql(json,sql)
-                }}>
-                    Run
-                </button>
             </div>
         );
     }
