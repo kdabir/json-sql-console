@@ -86,6 +86,9 @@ class App extends Component {
                         />
                     </div>
                 </div>
+                <div className="row">
+                    check browser console for output
+                </div>
             </div>
         );
     }
