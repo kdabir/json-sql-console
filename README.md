@@ -4,6 +4,19 @@ Query json like a pro
 
 ---
 
+![image](https://user-images.githubusercontent.com/735240/31587511-917b035e-b200-11e7-92e2-2428acfaf9b9.png)
+
+* json data from https://www.sitepoint.com/colors-json-example/
+
+
+Example query:
+
+```SQL
+  select color, code->hex 
+  from ?
+  where type = 'primary'
+```
+
 ## developing
 
 npm start
