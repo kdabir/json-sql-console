@@ -45,10 +45,25 @@ class App extends Component {
 
     runSql() {
         console.log('running SQL...');
-        console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
+        try {
+            console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
+            this.setState({'parseError': null});
+        } catch(e) {
+            this.setState({'parseError': e.message});
+        }
     }
 
     render() {
+        const {parseError} = this.state;
+
+        const renderError = () => {
+            return (
+            <div className="row">
+                <pre style={{whiteSpace: 'pre-wrap', color: 'red'}}>{parseError}</pre>
+            </div>
+            )
+        };
+
         return (
             <div className="App">
 
@@ -86,6 +101,7 @@ class App extends Component {
                         />
                     </div>
                 </div>
+                {parseError && renderError()} 
                 <div className="row">
                     check browser console for output
                 </div>
