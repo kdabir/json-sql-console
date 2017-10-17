@@ -21,17 +21,17 @@ Example queries:
   where code->rgba->includes(255)
 ```
 
-## developing
+## Developing
 
-npm start
+    $ npm start
 
-## build
+## Build
 
-npm build
+    $ make build
 
-## deploy 
+## Deploy 
 
-netlify deploy
+    $ make deploy
 
 
 
