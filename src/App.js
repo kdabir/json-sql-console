@@ -46,15 +46,16 @@ class App extends Component {
     runSql() {
         console.log('running SQL...');
         try {
-            console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
-            this.setState({'parseError': null});
+            const results = alasql(this.state.sql, [JSON.parse(this.state.json)]);
+            console.table(results);
+            this.setState({'parseError': null, results});
         } catch(e) {
-            this.setState({'parseError': e.message});
+            this.setState({'parseError': e.message, 'results': null});
         }
     }
 
     render() {
-        const {parseError} = this.state;
+        const {parseError, results} = this.state;
 
         const renderError = () => {
             return (
@@ -63,6 +64,32 @@ class App extends Component {
             </div>
             )
         };
+
+        const showResults = () => {
+            const keys = Object.keys(results[0]).map((e, i) => <div key={i} style={{flex: 1}}>{e}</div>);
+
+            const row = (e) => {
+                const keys = Object.keys(e).map((k, i) => {
+                    const val = e[k];
+                    if (typeof val !== 'object') {
+                        return <div key={i} style={{flex: 1}}>{val}</div>;
+                    }
+
+                    return <div key={i} style={{flex: 1}}>&#9654;</div>
+                });
+
+                return keys;
+            }
+
+            const rows = results.map((e, i) => <div key={i} style={{display: 'flex', padding: '10px 0', borderBottom: '1px solid grey'}}>{row(e)}</div>);
+
+            return (
+                <div style={{margin: '20px'}}>
+                    <div style={{display: 'flex', padding: '10px 0', border: '1px solid grey'}}>{keys}</div>
+                    <div style={{display: 'flex', flexDirection: 'column', flex: 1, border: '1px solid grey', borderTop: '0', borderBottom: '0'}}>{rows}</div> 
+                </div>
+            );
+        }
 
         return (
             <div className="App">
@@ -102,9 +129,7 @@ class App extends Component {
                     </div>
                 </div>
                 {parseError && renderError()} 
-                <div className="row">
-                    check browser console for output
-                </div>
+                {results && showResults()}
             </div>
         );
     }
