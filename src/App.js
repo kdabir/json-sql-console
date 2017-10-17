@@ -44,6 +44,7 @@ class App extends Component {
     }
 
     runSql() {
+		console.log("is valid json?",this.validateJSON(this.state.json));
         console.log('running SQL...');
         try {
             console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
@@ -52,6 +53,32 @@ class App extends Component {
             this.setState({'parseError': e.message});
         }
     }
+
+	/**
+	 * This function will take a text input and checks if it is valid json
+	 * @param {String} jsonFile The json file entered by the user
+	 * @returns {Boolean} The determination if the file is valid json
+	 */
+	validateJSON(jsonFile) {
+		//first a quick way to check the size of the file is to check the character length
+		//Let's assume first of all that a JSON input file should be no larger than 1MB, or 1048576 characters
+		if(jsonFile.length > 1048576) {
+			return false;
+		}
+		//Second check if it is a valid JSON with JSON.parse 
+		var validJson;
+		try {
+			validJson = JSON.parse(jsonFile);
+		} catch(e) {
+			return false; 
+		}
+		//finally check if there are more than 1000 items in the json array or 1000 keys in the object
+		if(Object.keys(validJson).length > 1000) {
+			return false;
+		}
+
+		return true;
+	}
 
     render() {
         const {parseError} = this.state;
