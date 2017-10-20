@@ -90,6 +90,10 @@ class QueryResults extends Component {
       return null;
     }
 
+    if (this.props.results.length <= 0) {
+      return null;
+    }
+
     return <div>{this.showResults(this.props.results)}</div>;
   }
 }

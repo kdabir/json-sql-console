@@ -41,6 +41,9 @@
   display: table;
   clear: both;
 }
+.errorMessage {
+  color:red;
+} 
 
 .fillup {
   width:100%;
