@@ -7,6 +7,8 @@ import "brace/mode/sql";
 import "brace/theme/solarized_dark";
 import "brace/ext/language_tools";
 
+import QueryResults from "./QueryResults";
+
 // storage wrapper, inspired by: https://survivejs.com/react/implementing-kanban/implementing-persistency/
 const sw = storage => ({
     get() {
@@ -65,32 +67,6 @@ class App extends Component {
             )
         };
 
-        const showResults = () => {
-            const keys = Object.keys(results[0]).map((e, i) => <div key={i} style={{flex: 1}}>{e}</div>);
-
-            const row = (e) => {
-                const keys = Object.keys(e).map((k, i) => {
-                    const val = e[k];
-                    if (typeof val !== 'object') {
-                        return <div key={i} style={{flex: 1}}>{val}</div>;
-                    }
-
-                    return <div key={i} style={{flex: 1}}>&#9654;</div>
-                });
-
-                return keys;
-            }
-
-            const rows = results.map((e, i) => <div key={i} style={{display: 'flex', padding: '10px 0', borderBottom: '1px solid grey'}}>{row(e)}</div>);
-
-            return (
-                <div style={{margin: '20px'}}>
-                    <div style={{display: 'flex', padding: '10px 0', border: '1px solid grey'}}>{keys}</div>
-                    <div style={{display: 'flex', flexDirection: 'column', flex: 1, border: '1px solid grey', borderTop: '0', borderBottom: '0'}}>{rows}</div> 
-                </div>
-            );
-        }
-
         return (
             <div className="App">
 
@@ -128,8 +104,8 @@ class App extends Component {
                         />
                     </div>
                 </div>
-                {parseError && renderError()} 
-                {results && showResults()}
+                {parseError && renderError()}
+                <QueryResults results={results}/>
             </div>
         );
     }
