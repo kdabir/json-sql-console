@@ -7,6 +7,8 @@ import "brace/mode/sql";
 import "brace/theme/solarized_dark";
 import "brace/ext/language_tools";
 
+import QueryResults from "./QueryResults";
+
 // storage wrapper, inspired by: https://survivejs.com/react/implementing-kanban/implementing-persistency/
 const sw = storage => ({
     get() {
@@ -44,13 +46,15 @@ class App extends Component {
     }
 
     runSql() {
-		this.validateJSON(this.state.json);
+        this.setState({'results': null});
+		    this.validateJSON(this.state.json);
         console.log('running SQL...');
         try {
-            console.table(alasql(this.state.sql, [JSON.parse(this.state.json)]));
-            this.setState({'parseError': null});
+            const results = alasql(this.state.sql, [JSON.parse(this.state.json)]);
+            console.table(results);
+            this.setState({'parseError': null, results});
         } catch(e) {
-            this.setState({'parseError': e.message});
+            this.setState({'parseError': e.message, 'results': null});
         }
     }
 
@@ -66,13 +70,13 @@ class App extends Component {
 			this.state.errorMessage = "Error: The entered JSON is larger than 1MB";
 			return false;
 		}
-		//Second check if it is a valid JSON with JSON.parse 
+		//Second check if it is a valid JSON with JSON.parse
 		var validJson;
 		try {
 			validJson = JSON.parse(jsonFile);
 		} catch(e) {
 			this.state.errorMessage = "Error: Not valid JSON";
-			return false; 
+			return false;
 		}
 		//Thirdly check if the json is an array
 		if(!Array.isArray(validJson)) {
@@ -88,7 +92,7 @@ class App extends Component {
 	}
 
     render() {
-        const {parseError} = this.state;
+        const {parseError, results} = this.state;
 
         const renderError = () => {
             return (
@@ -135,13 +139,11 @@ class App extends Component {
                         />
                     </div>
                 </div>
-                {parseError && renderError()} 
-				<div className="row">
-					<span class="errorMessage">{this.state.errorMessage}</span>	
-				</div>
-                <div className="row">
-                    check browser console for output
-                </div>
+              <div className="row">
+                <span className="errorMessage">{this.state.errorMessage}</span>
+              </div>
+              {parseError && renderError()}
+              <QueryResults results={results}/>
             </div>
         );
     }
