@@ -7,8 +7,8 @@ class QueryResults extends Component {
     this.state = {show: undefined};
   }
 
-  drawHeader(results) {
-    return Object.keys(results[0]).map((key, i) => <div key={i} style={{flex: 1}}>{key}</div>);
+  drawHeader(keys) {
+    return keys.map((key, i) => <div key={i} style={{flex: 1}}>{key}</div>);
   }
 
   drawValue(val, i) {
@@ -21,9 +21,19 @@ class QueryResults extends Component {
     return <div key={i} style={{flex: 1}}>{'{...}'}</div>;
   }
 
+  determineKeys(results) {
+    return results.map(result => Object.keys(result)).reduce((a, b) => {
+      if (b.length >= a.length) {
+        return b;
+      }
+      return b;
+    }, []);
+  }
+
   showResults(results) {
-    const keys = this.drawHeader(results);
-    const rows = this.drawResults(results);
+    const keys = this.determineKeys(results);
+    const drawnKeys = this.drawHeader(keys);
+    const rows = this.drawResults(results, keys);
 
     return (
       <div style={{margin: '20px'}}>
@@ -32,7 +42,7 @@ class QueryResults extends Component {
           padding: '10px 0',
           border: '1px solid grey',
           backgroundColor: '#c0c0c0'
-        }}>{keys}</div>
+        }}>{drawnKeys}</div>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -46,7 +56,7 @@ class QueryResults extends Component {
     );
   };
 
-  drawResults(results) {
+  drawResults(results, keys) {
     return results.map((result, i) => {
 
       return <div key={`t-${i}`}>
@@ -54,7 +64,7 @@ class QueryResults extends Component {
           display: 'flex',
           padding: '10px 0',
           borderBottom: '1px solid grey'
-        }} onClick={this.toggleShow.bind(this, i)}>{this.drawResult(result)}</div>
+        }} onClick={this.toggleShow.bind(this, i)}>{this.drawResult(result, keys)}</div>
         <div style={{borderBottom: '1px solid grey', display: this.showDetails(i)}}>
           <pre style={{textAlign: 'left', padding: '1em 0', margin: '0', backgroundColor: '#ececec'}}>{JSON.stringify(result, undefined, 2)}</pre>
         </div>
@@ -77,8 +87,8 @@ class QueryResults extends Component {
     return this.state.show === i ? 'block': 'none';
   }
 
-  drawResult(e) {
-    return Object.keys(e).map((k, i) => {
+  drawResult(e, keys) {
+    return keys.map((k, i) => {
       const val = e[k];
       return this.drawValue(val, i);
     });
