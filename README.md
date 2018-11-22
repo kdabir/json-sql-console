@@ -1,5 +1,7 @@
 # json-sql-console
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kdabir/json-sql-console.svg)](https://greenkeeper.io/)
+
 Query json like a pro
 
 
