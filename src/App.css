@@ -23,8 +23,12 @@
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* customization */
@@ -41,10 +45,11 @@
   display: table;
   clear: both;
 }
+
 .errorMessage {
-  color:red;
-} 
+  color: red;
+}
 
 .fillup {
-  width:100%;
+  width: 100%;
 }

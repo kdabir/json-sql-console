@@ -66,7 +66,12 @@ class QueryResults extends Component {
           borderBottom: '1px solid grey'
         }} onClick={this.toggleShow.bind(this, i)}>{this.drawResult(result, keys)}</div>
         <div style={{borderBottom: '1px solid grey', display: this.showDetails(i)}}>
-          <pre style={{textAlign: 'left', padding: '1em 0', margin: '0', backgroundColor: '#ececec'}}>{JSON.stringify(result, undefined, 2)}</pre>
+          <pre style={{
+            textAlign: 'left',
+            padding: '1em 0',
+            margin: '0',
+            backgroundColor: '#ececec'
+          }}>{JSON.stringify(result, undefined, 2)}</pre>
         </div>
       </div>
     });
@@ -84,7 +89,7 @@ class QueryResults extends Component {
   }
 
   showDetails(i) {
-    return this.state.show === i ? 'block': 'none';
+    return this.state.show === i ? 'block' : 'none';
   }
 
   drawResult(e, keys) {
