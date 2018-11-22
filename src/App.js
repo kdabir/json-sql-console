@@ -67,7 +67,7 @@ class App extends Component {
     //first a quick way to check the size of the file is to check the character length
     //Let's assume first of all that a JSON input file should be no larger than 1MB, or 1048576 characters
     if (jsonFile.length > 1048576) {
-      this.state.errorMessage = "Error: The entered JSON is larger than 1MB";
+      this.setState({errorMessage: "Error: The entered JSON is larger than 1MB"});
       return false;
     }
     //Second check if it is a valid JSON with JSON.parse
@@ -75,19 +75,19 @@ class App extends Component {
     try {
       validJson = JSON.parse(jsonFile);
     } catch (e) {
-      this.state.errorMessage = "Error: Not valid JSON";
+      this.setState({errorMassage:  "Error: Not valid JSON"});
       return false;
     }
     //Thirdly check if the json is an array
     if (!Array.isArray(validJson)) {
-      this.state.errorMessage = "Error: The entered JSON is not an array";
+      this.setState({errorMassage:  "Error: The entered JSON is not an array"});
     }
     //finally check if there are more than 1000 items in the json array or 1000 keys in the object
     if (validJson.length > 1000) {
-      this.state.errorMessage = "Error: The array contains more than 1000 entries";
+      this.setState({errorMassage:  "Error: The array contains more than 1000 entries"});
       return false;
     }
-    this.state.errorMessage = "";
+    this.setState({errorMassage:  ""});
     return true;
   }
 
