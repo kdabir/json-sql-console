@@ -131,6 +131,7 @@ class App extends Component {
             </p>
             <AceEditor
               ref='sqlEditor'
+              options
               style={{width: '100%'}}
               mode="sql"
               theme="solarized_dark"
@@ -142,6 +143,10 @@ class App extends Component {
                   this.update()
                 }
               }]}
+              setOptions={{
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+              }}
             />
           </div>
         </div>
