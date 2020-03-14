@@ -5,7 +5,7 @@
   "dependencies": {
     "alasql": "^0.5.0",
     "react": "^16.6.3",
-    "react-ace": "^7.0.0",
+    "react-ace": "^8.1.0",
     "react-dom": "^16.6.3",
     "react-scripts": "3.3.0"
   },
