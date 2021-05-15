@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import './App.css';
 import alasql from 'alasql';
 import AceEditor from "react-ace";
-import "brace/mode/json";
-import "brace/mode/sql";
-import "brace/theme/solarized_dark";
-import "brace/ext/language_tools";
+import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/mode-sql";
+import "ace-builds/src-noconflict/theme-dracula";
+import "ace-builds/src-noconflict/ext-language_tools";
 
 import QueryResults from "./QueryResults";
 
@@ -112,7 +112,7 @@ class App extends Component {
               ref='jsonEditor'
               style={{width: '100%'}}
               mode="json"
-              theme="solarized_dark"
+              theme="dracula"
               value={this.state.json}
               commands={[{
                 name: 'execute',
@@ -134,7 +134,7 @@ class App extends Component {
               options
               style={{width: '100%'}}
               mode="sql"
-              theme="solarized_dark"
+              theme="dracula"
               value={this.state.sql}
               commands={[{
                 name: 'execute',
